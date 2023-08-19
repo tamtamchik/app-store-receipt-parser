@@ -1,0 +1,50 @@
+{
+  "name": "@tamtamchik/app-store-receipt-parser",
+  "version": "1.0.0-pre.0",
+  "description": "A lightweight TypeScript library for extracting transaction IDs from Apple's ASN.1 encoded receipts.",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./src/index.ts",
+  "author": "Yuri Tkachenko <yuri.tam.tkachenko@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/tamtamchik/app-store-receipt-parser#readme",
+  "bugs": {
+    "url": "https://github.com/tamtamchik/app-store-receipt-parser/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/tamtamchik/app-store-receipt-parser.git"
+  },
+  "keywords": [
+    "apple",
+    "receipt",
+    "parser",
+    "ASN.1",
+    "transaction",
+    "typescript"
+  ],
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./src/index.ts"
+    }
+  },
+  "dependencies": {
+    "asn1js": "3.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "20.5.1",
+    "@typescript-eslint/eslint-plugin": "6.4.0",
+    "@typescript-eslint/parser": "6.4.0",
+    "eslint": "8.47.0",
+    "tsup": "7.2.0",
+    "typescript": "5.1.6"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --clean",
+    "dev": "npm run build -- --watch src",
+    "lint": "eslint src --fix",
+    "prepublishOnly": "npm run build"
+  }
+}
