@@ -2,6 +2,7 @@
 
 [![Buy Me A Coffee][ico-coffee]][link-coffee]
 [![Latest Version on NPM][ico-version]][link-npm]
+[![CircleCI][ico-circleci]][link-circleci]
 [![Software License][ico-license]](./LICENSE)
 [![Total Downloads][ico-downloads]][link-downloads]
 
@@ -63,7 +64,9 @@ Apple Receipt Parser is [MIT licensed](./LICENSE).
 [ico-version]: https://img.shields.io/npm/v/@tamtamchik/apple-receipt-parser.svg?style=flat-square
 [ico-license]: https://img.shields.io/npm/l/@tamtamchik/apple-receipt-parser.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/npm/dt/@tamtamchik/apple-receipt-parser.svg?style=flat-square
+[ico-circleci]: https://img.shields.io/circleci/build/github/tamtamchik/apple-receipt-parser.svg?style=flat-square
 
 [link-coffee]: https://www.buymeacoffee.com/tamtamchik
 [link-npm]: https://www.npmjs.com/package/@tamtamchik/apple-receipt-parser
 [link-downloads]: https://www.npmjs.com/package/@tamtamchik/apple-receipt-parser
+[link-circleci]: https://app.circleci.com/pipelines/github/tamtamchik/apple-receipt-parser?branch=main
