@@ -1,6 +1,6 @@
 {
   "name": "@tamtamchik/app-store-receipt-parser",
-  "version": "1.0.0-pre.2",
+  "version": "1.0.0",
   "description": "A lightweight TypeScript library for extracting transaction IDs from Apple's ASN.1 encoded receipts.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
