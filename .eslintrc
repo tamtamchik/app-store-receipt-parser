@@ -18,6 +18,7 @@
     "@typescript-eslint/object-curly-spacing": [ "error", "always" ]
   },
   "env": {
-    "node": true
+    "node": true,
+    "jest": true
   }
 }

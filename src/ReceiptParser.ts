@@ -51,6 +51,11 @@ export class ReceiptParser {
 
   static getTransactionIdsFromReceiptString (receiptString: string): TransactionIds | null {
     const { result } = fromBER(Buffer.from(receiptString, 'base64'))
+
+    if (result.error) {
+      throw new Error(`Error parsing receipt: ${result.error}`)
+    }
+
     return this.getTransactionIdsFromBlock(result.toJSON() as Block)
   }
 
@@ -72,10 +77,12 @@ export class ReceiptParser {
     if (!Array.isArray(block.valueBlock.value)) {
       return null
     }
+
     // The transaction ID is encoded as an OCTET STRING containing a UTF8String
     if (block.blockName === 'OCTET STRING' && block.valueBlock.value[0].blockName === 'UTF8String') {
       return block.valueBlock.value[0].valueBlock.value as string
     }
+
     return null
   }
 
