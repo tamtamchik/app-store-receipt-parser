@@ -49,6 +49,7 @@
     "dev": "npm run build -- --watch src",
     "lint": "eslint src --fix",
     "test": "jest",
+    "coverage": "jest --coverage",
     "prepublishOnly": "npm run build"
   }
 }
