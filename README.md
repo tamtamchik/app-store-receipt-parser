@@ -17,19 +17,19 @@ A lightweight TypeScript library for extracting transaction IDs from Apple's ASN
 Using npm:
 
 ```shell
-npm install @tamtamchik/apple-receipt-parser
+npm install @tamtamchik/app-store-receipt-parser
 ```
 
 Using yarn:
 
 ```shell
-yarn add @tamtamchik/apple-receipt-parser
+yarn add @tamtamchik/app-store-receipt-parser
 ```
 
 ## Usage
 
 ```typescript
-import { ReceiptParser } from '@tamtamchik/apple-receipt-parser';
+import { ReceiptParser } from '@tamtamchik/app-store-receipt-parser';
 
 // Unified Receipt string 
 const receiptString = "MII...";
@@ -61,12 +61,12 @@ Pull requests are always welcome. If you have bigger changes in mind, please ope
 Apple Receipt Parser is [MIT licensed](./LICENSE).
 
 [ico-coffee]: https://img.shields.io/badge/Buy%20Me%20A-Coffee-%236F4E37.svg?style=flat-square
-[ico-version]: https://img.shields.io/npm/v/@tamtamchik/apple-receipt-parser.svg?style=flat-square
-[ico-license]: https://img.shields.io/npm/l/@tamtamchik/apple-receipt-parser.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/npm/dt/@tamtamchik/apple-receipt-parser.svg?style=flat-square
-[ico-circleci]: https://img.shields.io/circleci/build/github/tamtamchik/apple-receipt-parser.svg?style=flat-square
+[ico-version]: https://img.shields.io/npm/v/@tamtamchik/app-store-receipt-parser.svg?style=flat-square
+[ico-license]: https://img.shields.io/npm/l/@tamtamchik/app-store-receipt-parser.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/npm/dt/@tamtamchik/app-store-receipt-parser.svg?style=flat-square
+[ico-circleci]: https://img.shields.io/circleci/build/github/tamtamchik/app-store-receipt-parser.svg?style=flat-square
 
 [link-coffee]: https://www.buymeacoffee.com/tamtamchik
-[link-npm]: https://www.npmjs.com/package/@tamtamchik/apple-receipt-parser
-[link-downloads]: https://www.npmjs.com/package/@tamtamchik/apple-receipt-parser
-[link-circleci]: https://app.circleci.com/pipelines/github/tamtamchik/apple-receipt-parser?branch=main
+[link-npm]: https://www.npmjs.com/package/@tamtamchik/app-store-receipt-parser
+[link-downloads]: https://www.npmjs.com/package/@tamtamchik/app-store-receipt-parser
+[link-circleci]: https://app.circleci.com/pipelines/github/tamtamchik/app-store-receipt-parser?branch=main
