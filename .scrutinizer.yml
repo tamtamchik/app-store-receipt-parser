@@ -3,14 +3,12 @@ build:
     node: v18.0.0
 
   nodes:
-    analysis:
-      project_setup:
-        override: true
-        commands:
-          - 'npm ci'
-          - 'npm test'
-          - 'npm run coverage'
-
-  cache:
-    directories:
-      - node_modules/
+    coverage:
+      tests:
+        override:
+          - npm ci
+          - npm test
+          - command: ./my-test-run
+            coverage:
+              file: coverage/lcov.info
+              format: lcov
