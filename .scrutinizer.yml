@@ -8,7 +8,7 @@ build:
         override:
           - npm ci
           - npm test
-          - command: ./my-test-run
+          - command: npm run coverage
             coverage:
               file: coverage/lcov.info
               format: lcov
