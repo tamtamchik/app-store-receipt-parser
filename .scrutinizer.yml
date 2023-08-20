@@ -1,4 +1,6 @@
 build:
+  image: default-jammy
+
   environment:
     node: 18
 
