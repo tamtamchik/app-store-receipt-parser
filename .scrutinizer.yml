@@ -10,8 +10,8 @@ build:
         override:
           - npm ci
           - npm test
+          - js-scrutinizer-run
           - command: npm run coverage
             coverage:
               file: coverage/lcov.info
               format: lcov
-          - js-scrutinizer-run

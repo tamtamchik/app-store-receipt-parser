@@ -1,8 +1,7 @@
-.circleci/
 .idea/
 coverage/
 test/
 
 .eslintrc
+.scrutinizer.yml
 jest.config.js
-tsconfig.json

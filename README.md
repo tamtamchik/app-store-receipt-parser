@@ -2,7 +2,9 @@
 
 [![Buy Me A Coffee][ico-coffee]][link-coffee]
 [![Latest Version on NPM][ico-version]][link-npm]
-[![CircleCI][ico-circleci]][link-circleci]
+[![Scrutinizer build][ico-scrutinizer-build]][link-scrutinizer]
+[![Scrutinizer quality][ico-scrutinizer-quality]][link-scrutinizer]
+[![Scrutinizer coverage][ico-scrutinizer-coverage]][link-scrutinizer]
 [![Software License][ico-license]](./LICENSE)
 [![Total Downloads][ico-downloads]][link-downloads]
 
@@ -64,9 +66,11 @@ Apple Receipt Parser is [MIT licensed](./LICENSE).
 [ico-version]: https://img.shields.io/npm/v/@tamtamchik/app-store-receipt-parser.svg?style=flat-square
 [ico-license]: https://img.shields.io/npm/l/@tamtamchik/app-store-receipt-parser.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/npm/dt/@tamtamchik/app-store-receipt-parser.svg?style=flat-square
-[ico-circleci]: https://img.shields.io/circleci/build/github/tamtamchik/app-store-receipt-parser.svg?style=flat-square
+[ico-scrutinizer-build]: https://img.shields.io/scrutinizer/build/g/tamtamchik/app-store-receipt-parser/main.svg?style=flat-square
+[ico-scrutinizer-quality]: https://img.shields.io/scrutinizer/quality/g/tamtamchik/app-store-receipt-parser/main.svg?style=flat-square
+[ico-scrutinizer-coverage]: https://img.shields.io/scrutinizer/coverage/g/tamtamchik/app-store-receipt-parser/main.svg?style=flat-square
 
 [link-coffee]: https://www.buymeacoffee.com/tamtamchik
 [link-npm]: https://www.npmjs.com/package/@tamtamchik/app-store-receipt-parser
 [link-downloads]: https://www.npmjs.com/package/@tamtamchik/app-store-receipt-parser
-[link-circleci]: https://app.circleci.com/pipelines/github/tamtamchik/app-store-receipt-parser?branch=main
+[link-scrutinizer]: https://scrutinizer-ci.com/g/tamtamchik/app-store-receipt-parser/
