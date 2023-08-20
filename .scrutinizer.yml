@@ -14,3 +14,4 @@ build:
             coverage:
               file: coverage/lcov.info
               format: lcov
+          - js-scrutinizer-run
