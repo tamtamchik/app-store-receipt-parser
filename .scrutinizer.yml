@@ -1,0 +1,17 @@
+build:
+  image: default-jammy
+
+  environment:
+    node: 18
+
+  nodes:
+    coverage:
+      tests:
+        override:
+          - npm ci
+          - npm test
+          - js-scrutinizer-run
+          - command: npm run coverage
+            coverage:
+              file: coverage/lcov.info
+              format: lcov
