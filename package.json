@@ -1,6 +1,6 @@
 {
   "name": "@tamtamchik/app-store-receipt-parser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A lightweight TypeScript library for extracting transaction IDs from Apple's ASN.1 encoded receipts.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -34,15 +34,15 @@
     "asn1js": "3.0.5"
   },
   "devDependencies": {
-    "@types/jest": "29.5.3",
-    "@types/node": "20.5.1",
-    "@typescript-eslint/eslint-plugin": "6.4.0",
-    "@typescript-eslint/parser": "6.4.0",
-    "eslint": "8.47.0",
-    "jest": "29.6.2",
+    "@types/jest": "29.5.8",
+    "@types/node": "20.9.0",
+    "@typescript-eslint/eslint-plugin": "6.11.0",
+    "@typescript-eslint/parser": "6.11.0",
+    "eslint": "8.53.0",
+    "jest": "29.7.0",
     "ts-jest": "29.1.1",
     "tsup": "7.2.0",
-    "typescript": "5.1.6"
+    "typescript": "5.2.2"
   },
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --clean",

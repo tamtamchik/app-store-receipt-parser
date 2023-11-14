@@ -62,6 +62,10 @@ Pull requests are always welcome. If you have bigger changes in mind, please ope
 
 Apple Receipt Parser is [MIT licensed](./LICENSE).
 
+## Third-Party Licenses
+
+This project uses `ASN1.js`, which is licensed under the BSD-3-Clause License. The license text can be found in [LICENSE](./LICENSE).
+
 [ico-coffee]: https://img.shields.io/badge/Buy%20Me%20A-Coffee-%236F4E37.svg?style=flat-square
 [ico-version]: https://img.shields.io/npm/v/@tamtamchik/app-store-receipt-parser.svg?style=flat-square
 [ico-license]: https://img.shields.io/npm/l/@tamtamchik/app-store-receipt-parser.svg?style=flat-square
