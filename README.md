@@ -11,7 +11,7 @@
 A lightweight TypeScript library for extracting transaction IDs from Apple's ASN.1 encoded Unified Receipts.
 
 > **Warning!** This library is not a full-fledged receipt parser. 
-> It only extracts transaction IDs from the Apple's ASN.1 encoded Unified Receipts.
+> It only extracts some information from the Apple's ASN.1 encoded Unified Receipts.
 > It does not work with the old style transactions receipts.
 
 ## Installation
@@ -31,28 +31,49 @@ yarn add @tamtamchik/app-store-receipt-parser
 ## Usage
 
 ```typescript
-import { ReceiptParser } from '@tamtamchik/app-store-receipt-parser';
+import { parseReceipt } from '@tamtamchik/app-store-receipt-parser';
 
 // Unified Receipt string 
 const receiptString = "MII...";
+const data = parseReceipt(receiptString);
 
-// As an instance ...
-const parser = new ReceiptParser(receiptString);
-const ids = parser.getTransactionIds();
-console.log(ids);
-// { 
-//    transactionIds: ['1000000000000000'], 
-//    originalTransactionIds: ['1000000000000000'], 
-// }
-
-// ... or as a static method
-const ids = ReceiptParser.getTransactionIds(receiptString);
-console.log(ids);
-// { 
-//    transactionIds: ['1000000000000000'], 
-//    originalTransactionIds: ['1000000000000000'], 
+console.log(data);
+// {
+//   APP_VERSION: '1',
+//   ORIGINAL_APP_VERSION: '1.0',
+//   OPAQUE_VALUE: 'c4dd4054b0b61a07beb585f6a842e048',
+//   SHA1_HASH: '2e0a115beac1c57023a5bd37349955a9ad99db4d',
+//   BUNDLE_ID: 'com.mbaasy.ios.demo',
+//   RECEIPT_CREATION_DATE: '2015-08-13T07:50:46Z',
+//   ORIGINAL_PURCHASE_DATE: '2013-08-01T07:00:00Z',
+//   IN_APP_EXPIRES_DATE: '2015-08-10T07:19:32Z',
+//   IN_APP_CANCELLATION_DATE: '',
+//   IN_APP_QUANTITY: '020101',
+//   IN_APP_WEB_ORDER_LINE_ITEM_ID: '0207038d7ea69472c9',
+//   IN_APP_PRODUCT_ID: 'monthly',
+//   IN_APP_TRANSACTION_ID: '1000000166967782',
+//   IN_APP_TRANSACTION_IDS: [
+//     '1000000166865231',
+//     '1000000166965150',
+//     '1000000166965327',
+//     '1000000166965895',
+//     '1000000166967152',
+//     '1000000166967484',
+//     '1000000166967782'
+//   ],
+//   IN_APP_ORIGINAL_TRANSACTION_ID: '1000000166965150',
+//   IN_APP_ORIGINAL_TRANSACTION_IDS: [
+//     '1000000166865231',
+//     '1000000166965150'
+//   ],
+//   IN_APP_PURCHASE_DATE: '2015-08-10T07:14:32Z',
+//   IN_APP_ORIGINAL_PURCHASE_DATE: '2015-08-10T07:12:34Z'
 // }
 ```
+
+## Special Thanks
+
+- [@Jurajzovinec](https://github.com/Jurajzovinec) for his superb contribution to the project.
 
 ## Contributing
 
