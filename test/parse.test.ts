@@ -12,7 +12,7 @@ describe('parseReceipt', () => {
   })
 
   it('should not parse invalid receipt', () => {
-    expect(() => parseReceipt(invalidReceipt)).toThrow('Root schema verification failed')
+    expect(() => parseReceipt(invalidReceipt)).toThrow('Receipt verification failed.')
   })
 
   it('parses transactions correctly using an instance', () => {

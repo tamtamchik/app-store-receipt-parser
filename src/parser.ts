@@ -1,42 +1,54 @@
-import * as ASN1JS from 'asn1js'
+import { IA5String, Integer, OctetString, Sequence, Set, Utf8String } from 'asn1js'
 
-import { RECEIPT_FIELDS_MAP, ReceiptFieldsKeys, ReceiptFieldsValues } from './mappings'
+import { RECEIPT_FIELDS_MAP, ReceiptFieldsKeyNames, ReceiptFieldsKeyValues } from './mappings'
 import { CONTENT_ID, FIELD_TYPE_ID, FIELD_VALUE_ID, IN_APP } from './constants'
+import { verifyFieldSchema, verifyReceiptSchema } from './verifications'
+import { uniqueArrayValues } from './utils'
 
-import { rootSchema } from './root.schema'
-import { fieldSchema } from './field.schema'
-
-export type ParsedReceipt = Record<ReceiptFieldsValues, string> & {
+export type ParsedReceipt = Partial<Record<ReceiptFieldsKeyNames, string>> & {
   IN_APP_ORIGINAL_TRANSACTION_IDS: string[]
   IN_APP_TRANSACTION_IDS: string[]
 }
 
-function isReceiptFieldKey (value: unknown): value is ReceiptFieldsKeys {
-  return Boolean(value && typeof value === 'number' && RECEIPT_FIELDS_MAP.has(value as ReceiptFieldsKeys))
+function isReceiptFieldKey (value: unknown): value is ReceiptFieldsKeyValues {
+  return Boolean(value && typeof value === 'number' && RECEIPT_FIELDS_MAP.has(value as ReceiptFieldsKeyValues))
 }
 
-function isParsedReceiptContentComplete (data: Partial<ParsedReceipt>): data is ParsedReceipt {
+function isParsedReceiptContentComplete (data: ParsedReceipt): data is ParsedReceipt {
   for (const fieldKey of RECEIPT_FIELDS_MAP.values()) {
     if (!(fieldKey in data)) {
       return false
     }
   }
+
   return true
 }
 
-function extractValue (field: ASN1JS.OctetString): string {
+function extractFieldValue (field: OctetString): string {
   const [fieldValue] = field.valueBlock.value
 
-  if (fieldValue instanceof ASN1JS.IA5String || fieldValue instanceof ASN1JS.Utf8String) {
+  if (fieldValue instanceof IA5String || fieldValue instanceof Utf8String) {
     return fieldValue.valueBlock.value
   }
 
   return field.toJSON().valueBlock.valueHex
 }
 
-function processField (parsedContent: Partial<ParsedReceipt>, fieldKey: number, fieldValue: ASN1JS.OctetString) {
+function appendField (parsed: ParsedReceipt, name: ReceiptFieldsKeyNames, value: string) {
+  if (name === 'IN_APP_ORIGINAL_TRANSACTION_ID') {
+    parsed.IN_APP_ORIGINAL_TRANSACTION_IDS.push(value)
+  }
+
+  if (name === 'IN_APP_TRANSACTION_ID') {
+    parsed.IN_APP_TRANSACTION_IDS.push(value)
+  }
+
+  parsed[name] = value
+}
+
+function processField (parsed: ParsedReceipt, fieldKey: number, fieldValue: OctetString) {
   if (fieldKey === IN_APP) {
-    parseOctetStringContent(parsedContent, fieldValue)
+    parseOctetStringContent(parsed, fieldValue)
     return
   }
 
@@ -44,60 +56,47 @@ function processField (parsedContent: Partial<ParsedReceipt>, fieldKey: number, 
     return
   }
 
-  const parsedReceiptContentFieldKey = RECEIPT_FIELDS_MAP.get(fieldKey)!
-  const value = extractValue(fieldValue)
+  const name = RECEIPT_FIELDS_MAP.get(fieldKey)!
+  appendField(parsed, name, extractFieldValue(fieldValue))
+}
 
-  parsedContent[parsedReceiptContentFieldKey] = value
+function parseOctetStringContent (parsed: ParsedReceipt, content: OctetString) {
+  const [contentSet] = content.valueBlock.value as Set[]
+  const contentSetSequences = contentSet.valueBlock.value.filter(v => v instanceof Sequence) as Sequence[]
 
-  if (parsedReceiptContentFieldKey === 'IN_APP_ORIGINAL_TRANSACTION_ID') {
-    parsedContent.IN_APP_ORIGINAL_TRANSACTION_IDS = Array.from(
-      new Set([...parsedContent.IN_APP_ORIGINAL_TRANSACTION_IDS || [], value])
-    )
-  }
+  for (const sequence of contentSetSequences) {
+    const verifiedSequence = verifyFieldSchema(sequence)
+    if (verifiedSequence) {
+      // We are confident to use "as" assertion because Integer type is guaranteed by positive verification above
+      const fieldKey = (verifiedSequence.result[FIELD_TYPE_ID] as Integer).valueBlock.valueDec
+      const fieldValueOctetString = verifiedSequence.result[FIELD_VALUE_ID] as OctetString
 
-  if (parsedReceiptContentFieldKey === 'IN_APP_TRANSACTION_ID') {
-    parsedContent.IN_APP_TRANSACTION_IDS = Array.from(
-      new Set([...parsedContent.IN_APP_TRANSACTION_IDS || [], value])
-    )
+      processField(parsed, fieldKey, fieldValueOctetString)
+    }
   }
 }
 
-function parseOctetStringContent (parsedContent: Partial<ParsedReceipt>, content: ASN1JS.OctetString) {
-  const [contentSet] = content.valueBlock.value as ASN1JS.Set[]
-  const contentSetSequences = contentSet.valueBlock.value
-    .filter(v => v instanceof ASN1JS.Sequence) as ASN1JS.Sequence[]
-
-  for (const sequence of contentSetSequences) {
-    const verifiedSequence = ASN1JS.verifySchema(sequence.toBER(), fieldSchema)
-    // The schema does not follow content field schema structure, so we cannot extract the field type and value
-    if (!verifiedSequence.verified) {
-      continue
-    }
-
-    // We are confident to use "as" assertion because Integer type is guaranteed by positive verification above
-    const fieldKey = (verifiedSequence.result[FIELD_TYPE_ID] as ASN1JS.Integer).valueBlock.valueDec
-    const fieldValueOctetString = verifiedSequence.result[FIELD_VALUE_ID] as ASN1JS.OctetString
-
-    processField(parsedContent, fieldKey, fieldValueOctetString)
-  }
+function postprocessParsedReceipt (parsed: ParsedReceipt) {
+  parsed.IN_APP_ORIGINAL_TRANSACTION_IDS = uniqueArrayValues(parsed.IN_APP_ORIGINAL_TRANSACTION_IDS)
+  parsed.IN_APP_TRANSACTION_IDS = uniqueArrayValues(parsed.IN_APP_TRANSACTION_IDS)
 }
 
 export function parseReceipt (receipt: string): ParsedReceipt {
-  const rootSchemaVerification = ASN1JS.verifySchema(Buffer.from(receipt, 'base64'), rootSchema)
-  if (!rootSchemaVerification.verified) {
-    throw new Error('Root schema verification failed')
+  const rootSchemaVerification = verifyReceiptSchema(receipt)
+
+  const content = rootSchemaVerification.result[CONTENT_ID] as OctetString
+  const parsed: ParsedReceipt = {
+    IN_APP_ORIGINAL_TRANSACTION_IDS: [],
+    IN_APP_TRANSACTION_IDS: [],
   }
 
-  const parsedContent: Partial<ParsedReceipt> = {}
-  const content = rootSchemaVerification.result[CONTENT_ID] as ASN1JS.OctetString
-
-  parseOctetStringContent(parsedContent, content)
+  parseOctetStringContent(parsed, content)
 
   // Verify if the parsed content contains all the required fields
-  if (!isParsedReceiptContentComplete(parsedContent)) {
+  if (!isParsedReceiptContentComplete(parsed)) {
     const missingProps = []
     for (const fieldKey of RECEIPT_FIELDS_MAP.values()) {
-      if (!(fieldKey in parsedContent)) {
+      if (!(fieldKey in parsed)) {
         missingProps.push(fieldKey)
       }
     }
@@ -105,5 +104,7 @@ export function parseReceipt (receipt: string): ParsedReceipt {
     throw new Error(`Missing required fields: ${missingProps.join(', ')}`)
   }
 
-  return parsedContent as ParsedReceipt
+  postprocessParsedReceipt(parsed)
+
+  return parsed as ParsedReceipt
 }

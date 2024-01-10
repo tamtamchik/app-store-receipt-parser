@@ -1,4 +1,4 @@
-export type ReceiptFieldsKeys =
+export type ReceiptFieldsKeyValues =
   | 2
   | 3
   | 4
@@ -16,7 +16,7 @@ export type ReceiptFieldsKeys =
   | 1711
   | 1712
 
-export type ReceiptFieldsValues =
+export type ReceiptFieldsKeyNames =
   | 'BUNDLE_ID'
   | 'APP_VERSION'
   | 'OPAQUE_VALUE'
@@ -38,7 +38,7 @@ export type ReceiptFieldsValues =
  * Receipt fields
  * @see https://developer.apple.com/library/archive/releasenotes/General/ValidateAppStoreReceipt/Chapters/ReceiptFields.html
  */
-export const RECEIPT_FIELDS_MAP: ReadonlyMap<ReceiptFieldsKeys, ReceiptFieldsValues> = new Map([
+export const RECEIPT_FIELDS_MAP: ReadonlyMap<ReceiptFieldsKeyValues, ReceiptFieldsKeyNames> = new Map([
   [2, 'BUNDLE_ID'],
   [3, 'APP_VERSION'],
   [4, 'OPAQUE_VALUE'],
