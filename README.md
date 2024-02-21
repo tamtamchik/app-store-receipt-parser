@@ -1,6 +1,5 @@
 # Apple Receipt Parser
 
-[![Buy Me A Coffee][ico-coffee]][link-coffee]
 [![Latest Version on NPM][ico-version]][link-npm]
 [![Scrutinizer build][ico-scrutinizer-build]][link-scrutinizer]
 [![Scrutinizer quality][ico-scrutinizer-quality]][link-scrutinizer]
@@ -11,8 +10,8 @@
 A lightweight TypeScript library for extracting transaction IDs from Apple's ASN.1 encoded Unified Receipts.
 
 > **Warning!** This library is not a full-fledged receipt parser. 
-> It only extracts some information from the Apple's ASN.1 encoded Unified Receipts.
-> It does not work with the old style transactions receipts.
+> It only extracts some information from Apple's ASN.1 encoded Unified Receipts.
+> It does not work with the old-style transactions receipts.
 
 > **Documentation for the version 1.x of the library can be found [here](https://github.com/tamtamchik/app-store-receipt-parser/tree/1.x/README.md).**
 
@@ -88,6 +87,9 @@ Apple Receipt Parser is [MIT licensed](./LICENSE).
 ## Third-Party Licenses
 
 This project uses `ASN1.js`, which is licensed under the BSD-3-Clause License. The license text can be found in [LICENSE](./LICENSE).
+
+---
+[![Buy Me A Coffee][ico-coffee]][link-coffee]
 
 [ico-coffee]: https://img.shields.io/badge/Buy%20Me%20A-Coffee-%236F4E37.svg?style=flat-square
 [ico-version]: https://img.shields.io/npm/v/@tamtamchik/app-store-receipt-parser.svg?style=flat-square
