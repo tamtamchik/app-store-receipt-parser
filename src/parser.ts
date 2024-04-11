@@ -5,13 +5,16 @@ import { CONTENT_ID, FIELD_TYPE_ID, FIELD_VALUE_ID, IN_APP } from './constants'
 import { verifyFieldSchema, verifyReceiptSchema } from './verifications'
 import { uniqueArrayValues } from './utils'
 
+export type Environment = 'Production' | 'ProductionSandbox' | string
+
 export type ParsedReceipt = Partial<Record<ReceiptFieldsKeyNames, string>> & {
+  ENVIRONMENT: Environment
   IN_APP_ORIGINAL_TRANSACTION_IDS: string[]
   IN_APP_TRANSACTION_IDS: string[]
 }
 
 function isReceiptFieldKey (value: unknown): value is ReceiptFieldsKeyValues {
-  return Boolean(value && typeof value === 'number' && RECEIPT_FIELDS_MAP.has(value as ReceiptFieldsKeyValues))
+  return Boolean(typeof value === 'number' && RECEIPT_FIELDS_MAP.has(value as ReceiptFieldsKeyValues))
 }
 
 function isParsedReceiptContentComplete (data: ParsedReceipt): data is ParsedReceipt {
@@ -86,6 +89,7 @@ export function parseReceipt (receipt: string): ParsedReceipt {
 
   const content = rootSchemaVerification.result[CONTENT_ID] as OctetString
   const parsed: ParsedReceipt = {
+    ENVIRONMENT: 'Production',
     IN_APP_ORIGINAL_TRANSACTION_IDS: [],
     IN_APP_TRANSACTION_IDS: [],
   }

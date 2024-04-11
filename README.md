@@ -40,6 +40,7 @@ const data = parseReceipt(receiptString);
 
 console.log(data);
 // {
+//   ENVIRONMENT: 'ProductionSandbox',
 //   APP_VERSION: '1',
 //   ORIGINAL_APP_VERSION: '1.0',
 //   OPAQUE_VALUE: 'c4dd4054b0b61a07beb585f6a842e048',

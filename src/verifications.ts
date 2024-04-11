@@ -38,7 +38,7 @@ const fieldSchema = new Sequence({
   value: [
     new Integer({ name: FIELD_TYPE_ID }),
     new Integer(),
-    new OctetString({ name: FIELD_VALUE_ID })
+    new OctetString({ name: FIELD_VALUE_ID }),
   ],
 })
 
