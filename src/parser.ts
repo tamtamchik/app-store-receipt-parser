@@ -86,6 +86,7 @@ export function parseReceipt (receipt: string): ParsedReceipt {
 
   const content = rootSchemaVerification.result[CONTENT_ID] as OctetString
   const parsed: ParsedReceipt = {
+    ENVIRONMENT: "Production",
     IN_APP_ORIGINAL_TRANSACTION_IDS: [],
     IN_APP_TRANSACTION_IDS: [],
   }
