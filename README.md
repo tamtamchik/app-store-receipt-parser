@@ -9,11 +9,13 @@
 
 A lightweight TypeScript library for extracting transaction IDs from Apple's ASN.1 encoded Unified Receipts.
 
-> **Warning!** This library is not a full-fledged receipt parser. 
+> [!IMPORTANT]
+> This library is not a full-fledged receipt parser. 
 > It only extracts some information from Apple's ASN.1 encoded Unified Receipts.
 > It does not work with the old-style transaction receipts.
 
-> **Documentation for the version 1.x of the library can be found [here](https://github.com/tamtamchik/app-store-receipt-parser/tree/1.x/README.md).**
+> [!NOTE]
+> Documentation for the version 1.x of the library can be found [here](https://github.com/tamtamchik/app-store-receipt-parser/tree/1.x/README.md).
 
 ## Installation
 
