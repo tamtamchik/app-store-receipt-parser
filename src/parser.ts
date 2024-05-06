@@ -1,11 +1,12 @@
-import { IA5String, Integer, OctetString, Sequence, Set, Utf8String } from 'asn1js'
+import * as ASN1 from 'asn1js'
 
 import { RECEIPT_FIELDS_MAP, ReceiptFieldsKeyNames, ReceiptFieldsKeyValues } from './mappings'
 import { CONTENT_ID, FIELD_TYPE_ID, FIELD_VALUE_ID, IN_APP } from './constants'
 import { verifyFieldSchema, verifyReceiptSchema } from './verifications'
-import { uniqueArrayValues } from './utils'
 
 export type Environment = 'Production' | 'ProductionSandbox' | string
+
+const uniqueArrayValues = (array: string[]) => Array.from(new Set(array))
 
 export type ParsedReceipt = Partial<Record<ReceiptFieldsKeyNames, string>> & {
   ENVIRONMENT: Environment
@@ -27,10 +28,10 @@ function isParsedReceiptContentComplete (data: ParsedReceipt): data is ParsedRec
   return true
 }
 
-function extractFieldValue (field: OctetString): string {
+function extractFieldValue (field: ASN1.OctetString): string {
   const [fieldValue] = field.valueBlock.value
 
-  if (fieldValue instanceof IA5String || fieldValue instanceof Utf8String) {
+  if (fieldValue instanceof ASN1.IA5String || fieldValue instanceof ASN1.Utf8String) {
     return fieldValue.valueBlock.value
   }
 
@@ -49,7 +50,7 @@ function appendField (parsed: ParsedReceipt, name: ReceiptFieldsKeyNames, value:
   parsed[name] = value
 }
 
-function processField (parsed: ParsedReceipt, fieldKey: number, fieldValue: OctetString) {
+function processField (parsed: ParsedReceipt, fieldKey: number, fieldValue: ASN1.OctetString) {
   if (fieldKey === IN_APP) {
     parseOctetStringContent(parsed, fieldValue)
     return
@@ -63,16 +64,17 @@ function processField (parsed: ParsedReceipt, fieldKey: number, fieldValue: Octe
   appendField(parsed, name, extractFieldValue(fieldValue))
 }
 
-function parseOctetStringContent (parsed: ParsedReceipt, content: OctetString) {
-  const [contentSet] = content.valueBlock.value as Set[]
-  const contentSetSequences = contentSet.valueBlock.value.filter(v => v instanceof Sequence) as Sequence[]
+function parseOctetStringContent (parsed: ParsedReceipt, content: ASN1.OctetString) {
+  const [contentSet] = content.valueBlock.value as ASN1.Set[]
+  const contentSetSequences = contentSet.valueBlock.value
+    .filter(v => v instanceof ASN1.Sequence) as ASN1.Sequence[]
 
   for (const sequence of contentSetSequences) {
     const verifiedSequence = verifyFieldSchema(sequence)
     if (verifiedSequence) {
       // We are confident to use "as" assertion because Integer type is guaranteed by positive verification above
-      const fieldKey = (verifiedSequence.result[FIELD_TYPE_ID] as Integer).valueBlock.valueDec
-      const fieldValueOctetString = verifiedSequence.result[FIELD_VALUE_ID] as OctetString
+      const fieldKey = (verifiedSequence.result[FIELD_TYPE_ID] as ASN1.Integer).valueBlock.valueDec
+      const fieldValueOctetString = verifiedSequence.result[FIELD_VALUE_ID] as ASN1.OctetString
 
       processField(parsed, fieldKey, fieldValueOctetString)
     }
@@ -87,7 +89,7 @@ function postprocessParsedReceipt (parsed: ParsedReceipt) {
 export function parseReceipt (receipt: string): ParsedReceipt {
   const rootSchemaVerification = verifyReceiptSchema(receipt)
 
-  const content = rootSchemaVerification.result[CONTENT_ID] as OctetString
+  const content = rootSchemaVerification.result[CONTENT_ID] as ASN1.OctetString
   const parsed: ParsedReceipt = {
     ENVIRONMENT: 'Production',
     IN_APP_ORIGINAL_TRANSACTION_IDS: [],

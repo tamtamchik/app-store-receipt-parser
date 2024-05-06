@@ -1,21 +1,21 @@
 export type ReceiptFieldsKeyValues =
-  | 0
-  | 2
-  | 3
-  | 4
-  | 5
-  | 12
-  | 18
-  | 19
-  | 1701
-  | 1702
-  | 1703
-  | 1704
-  | 1705
-  | 1706
-  | 1708
-  | 1711
-  | 1712
+  | 0     // Environment
+  | 2     // Bundle ID
+  | 3     // App version
+  | 4     // Opaque value
+  | 5     // SHA-1 hash
+  | 12    // Receipt creation date
+  | 18    // Original purchase date
+  | 19    // Original app version
+  | 1701  // In-app quantity
+  | 1702  // In-app product ID
+  | 1703  // In-app transaction ID
+  | 1704  // In-app purchase date
+  | 1705  // In-app original transaction ID
+  | 1706  // In-app original purchase date
+  | 1708  // In-app expires date
+  | 1711  // In-app web order line item ID
+  | 1712  // In-app cancellation date
 
 export type ReceiptFieldsKeyNames =
   | 'ENVIRONMENT'
@@ -59,4 +59,3 @@ export const RECEIPT_FIELDS_MAP: ReadonlyMap<ReceiptFieldsKeyValues, ReceiptFiel
   [1711, 'IN_APP_WEB_ORDER_LINE_ITEM_ID'],
   [1712, 'IN_APP_CANCELLATION_DATE'],
 ])
-
