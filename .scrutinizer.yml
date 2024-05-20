@@ -2,7 +2,7 @@ build:
   image: default-jammy
 
   environment:
-    node: 18
+    node: 20
 
   nodes:
     coverage:
