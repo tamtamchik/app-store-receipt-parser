@@ -1,8 +1,15 @@
 import * as ASN1 from 'asn1js'
 
-import { RECEIPT_FIELDS_MAP, ReceiptFieldsKeyNames, ReceiptFieldsKeyValues } from './mappings'
-import { CONTENT_ID, FIELD_TYPE_ID, FIELD_VALUE_ID, IN_APP } from './constants'
-import { verifyFieldSchema, verifyReceiptSchema } from './verifications'
+import {
+  CONTENT_ID,
+  FIELD_TYPE_ID,
+  FIELD_VALUE_ID,
+  IN_APP,
+  RECEIPT_FIELDS_MAP,
+  ReceiptFieldsKeyNames, ReceiptFieldsKeyValues,
+} from './constants'
+
+import { ReceiptVerifier } from './ReceiptVerifier'
 
 export type Environment = 'Production' | 'ProductionSandbox' | string
 
@@ -14,13 +21,19 @@ export type ParsedReceipt = Partial<Record<ReceiptFieldsKeyNames, string>> & {
 
 class ReceiptParser {
   private readonly parsed: ParsedReceipt
+  private readonly receiptVerifier: ReceiptVerifier
 
   constructor() {
+    this.receiptVerifier = new ReceiptVerifier()
     this.parsed = this.createInitialParsedReceipt()
   }
 
   public parseReceipt(receipt: string): ParsedReceipt {
-    const rootSchemaVerification = verifyReceiptSchema(receipt)
+    if (receipt.trim() === '') {
+      throw new Error('Receipt must be a non-empty string.')
+    }
+
+    const rootSchemaVerification = this.receiptVerifier.verifyReceiptSchema(receipt)
     const content = rootSchemaVerification.result[CONTENT_ID] as ASN1.OctetString
 
     this.parseReceiptContent(content)
@@ -50,7 +63,7 @@ class ReceiptParser {
   }
 
   private processSequence(sequence: ASN1.Sequence): void {
-    const verifiedSequence = verifyFieldSchema(sequence)
+    const verifiedSequence = this.receiptVerifier.verifyFieldSchema(sequence)
     if (verifiedSequence) {
       this.handleVerifiedSequence(verifiedSequence)
     }

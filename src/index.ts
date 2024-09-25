@@ -1,2 +1,2 @@
-export type { ParsedReceipt } from './parser'
-export { parseReceipt } from './parser'
+export type { ParsedReceipt } from './ReceiptParser'
+export { parseReceipt } from './ReceiptParser'

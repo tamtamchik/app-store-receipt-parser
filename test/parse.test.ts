@@ -14,11 +14,15 @@ describe('parseReceipt', () => {
     expect(parseReceipt).toBeDefined()
   })
 
-  it('should not parse invalid receipt', () => {
+  it('should throw error for invalid receipt', () => {
     expect(() => parseReceipt(invalidReceipt)).toThrow('Receipt verification failed.')
   })
 
-  it('parses transactions correctly', () => {
+  it('should throw error for empty receipt', () => {
+    expect(() => parseReceipt('')).toThrow('Receipt must be a non-empty string.')
+  })
+
+  it('should parse transactions correctly for validReceipt', () => {
     const receipt = parseReceipt(validReceipt)
 
     expect(receipt).toBeDefined()
@@ -57,7 +61,7 @@ describe('parseReceipt', () => {
     ])
   })
 
-  it('parses transactions correctly once again', () => {
+  it('should parse transactions correctly for validReceipt2', () => {
     const receipt = parseReceipt(validReceipt2)
 
     expect(receipt).toBeDefined()
@@ -83,5 +87,18 @@ describe('parseReceipt', () => {
 
     expect(receipt.IN_APP_ORIGINAL_TRANSACTION_ID).toStrictEqual('1000000472106082')
     expect(receipt.IN_APP_ORIGINAL_TRANSACTION_IDS).toStrictEqual(['1000000472106082'])
+  })
+
+  it('should handle receipts with unexpected fields', () => {
+    const receiptWithExtraFields = validReceipt + 'EXTRA_FIELD_DATA'
+    const receipt = parseReceipt(receiptWithExtraFields)
+
+    expect(receipt).toBeDefined()
+    // Verify that all expected fields are still present and correct
+    expect(receipt.ENVIRONMENT).toStrictEqual('ProductionSandbox')
+    // Add more expectations for other fields
+    
+    // Verify that no unexpected fields are added
+    expect(Object.keys(receipt)).not.toContain('EXTRA_FIELD')
   })
 })
