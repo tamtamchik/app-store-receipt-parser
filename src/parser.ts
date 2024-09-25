@@ -6,111 +6,127 @@ import { verifyFieldSchema, verifyReceiptSchema } from './verifications'
 
 export type Environment = 'Production' | 'ProductionSandbox' | string
 
-const uniqueArrayValues = (array: string[]) => Array.from(new Set(array))
-
 export type ParsedReceipt = Partial<Record<ReceiptFieldsKeyNames, string>> & {
   ENVIRONMENT: Environment
   IN_APP_ORIGINAL_TRANSACTION_IDS: string[]
   IN_APP_TRANSACTION_IDS: string[]
 }
 
-function isReceiptFieldKey (value: unknown): value is ReceiptFieldsKeyValues {
-  return Boolean(typeof value === 'number' && RECEIPT_FIELDS_MAP.has(value as ReceiptFieldsKeyValues))
-}
+class ReceiptParser {
+  private readonly parsed: ParsedReceipt
 
-function isParsedReceiptContentComplete (data: ParsedReceipt): data is ParsedReceipt {
-  for (const fieldKey of RECEIPT_FIELDS_MAP.values()) {
-    if (!(fieldKey in data)) {
-      return false
+  constructor() {
+    this.parsed = this.createInitialParsedReceipt()
+  }
+
+  public parseReceipt(receipt: string): ParsedReceipt {
+    const rootSchemaVerification = verifyReceiptSchema(receipt)
+    const content = rootSchemaVerification.result[CONTENT_ID] as ASN1.OctetString
+
+    this.parseReceiptContent(content)
+    this.validateParsedFields()
+    this.deduplicateArrayFields()
+
+    return this.parsed
+  }
+
+  private createInitialParsedReceipt(): ParsedReceipt {
+    return {
+      ENVIRONMENT: 'Production',
+      IN_APP_ORIGINAL_TRANSACTION_IDS: [],
+      IN_APP_TRANSACTION_IDS: [],
     }
   }
 
-  return true
-}
-
-function extractFieldValue (field: ASN1.OctetString): string {
-  const [fieldValue] = field.valueBlock.value
-
-  if (fieldValue instanceof ASN1.IA5String || fieldValue instanceof ASN1.Utf8String) {
-    return fieldValue.valueBlock.value
+  private parseReceiptContent(content: ASN1.OctetString): void {
+    const sequences = this.extractSequencesFromContent(content)
+    sequences.forEach(this.processSequence.bind(this))
   }
 
-  return field.toJSON().valueBlock.valueHex
-}
-
-function appendField (parsed: ParsedReceipt, name: ReceiptFieldsKeyNames, value: string) {
-  if (name === 'IN_APP_ORIGINAL_TRANSACTION_ID') {
-    parsed.IN_APP_ORIGINAL_TRANSACTION_IDS.push(value)
+  private extractSequencesFromContent(content: ASN1.OctetString): ASN1.Sequence[] {
+    const [contentSet] = content.valueBlock.value as ASN1.Set[]
+    return contentSet.valueBlock.value
+      .filter(v => v instanceof ASN1.Sequence) as ASN1.Sequence[]
   }
 
-  if (name === 'IN_APP_TRANSACTION_ID') {
-    parsed.IN_APP_TRANSACTION_IDS.push(value)
-  }
-
-  parsed[name] = value
-}
-
-function processField (parsed: ParsedReceipt, fieldKey: number, fieldValue: ASN1.OctetString) {
-  if (fieldKey === IN_APP) {
-    parseOctetStringContent(parsed, fieldValue)
-    return
-  }
-
-  if (!isReceiptFieldKey(fieldKey)) {
-    return
-  }
-
-  const name = RECEIPT_FIELDS_MAP.get(fieldKey)!
-  appendField(parsed, name, extractFieldValue(fieldValue))
-}
-
-function parseOctetStringContent (parsed: ParsedReceipt, content: ASN1.OctetString) {
-  const [contentSet] = content.valueBlock.value as ASN1.Set[]
-  const contentSetSequences = contentSet.valueBlock.value
-    .filter(v => v instanceof ASN1.Sequence) as ASN1.Sequence[]
-
-  for (const sequence of contentSetSequences) {
+  private processSequence(sequence: ASN1.Sequence): void {
     const verifiedSequence = verifyFieldSchema(sequence)
     if (verifiedSequence) {
-      // We are confident to use "as" assertion because Integer type is guaranteed by positive verification above
-      const fieldKey = (verifiedSequence.result[FIELD_TYPE_ID] as ASN1.Integer).valueBlock.valueDec
-      const fieldValueOctetString = verifiedSequence.result[FIELD_VALUE_ID] as ASN1.OctetString
-
-      processField(parsed, fieldKey, fieldValueOctetString)
+      this.handleVerifiedSequence(verifiedSequence)
     }
   }
-}
 
-function postprocessParsedReceipt (parsed: ParsedReceipt) {
-  parsed.IN_APP_ORIGINAL_TRANSACTION_IDS = uniqueArrayValues(parsed.IN_APP_ORIGINAL_TRANSACTION_IDS)
-  parsed.IN_APP_TRANSACTION_IDS = uniqueArrayValues(parsed.IN_APP_TRANSACTION_IDS)
-}
+  private handleVerifiedSequence(verifiedSequence: ASN1.CompareSchemaSuccess): void {
+    const fieldKey = (verifiedSequence.result[FIELD_TYPE_ID] as ASN1.Integer).valueBlock.valueDec
+    const fieldValue = verifiedSequence.result[FIELD_VALUE_ID] as ASN1.OctetString
 
-export function parseReceipt (receipt: string): ParsedReceipt {
-  const rootSchemaVerification = verifyReceiptSchema(receipt)
-
-  const content = rootSchemaVerification.result[CONTENT_ID] as ASN1.OctetString
-  const parsed: ParsedReceipt = {
-    ENVIRONMENT: 'Production',
-    IN_APP_ORIGINAL_TRANSACTION_IDS: [],
-    IN_APP_TRANSACTION_IDS: [],
+    const handler = this.getFieldHandler(fieldKey)
+    handler(fieldValue)
   }
 
-  parseOctetStringContent(parsed, content)
-
-  // Verify if the parsed content contains all the required fields
-  if (!isParsedReceiptContentComplete(parsed)) {
-    const missingProps = []
-    for (const fieldKey of RECEIPT_FIELDS_MAP.values()) {
-      if (!(fieldKey in parsed)) {
-        missingProps.push(fieldKey)
+  private getFieldHandler(fieldKey: number): (fieldValue: ASN1.OctetString) => void {
+    if (fieldKey === IN_APP) {
+      return this.parseReceiptContent.bind(this)
+    }
+    if (this.isValidReceiptFieldKey(fieldKey)) {
+      const name = RECEIPT_FIELDS_MAP.get(fieldKey)!
+      return (fieldValue: ASN1.OctetString) => {
+        this.addFieldToReceipt(name, this.extractStringValue(fieldValue))
       }
     }
-
-    throw new Error(`Missing required fields: ${missingProps.join(', ')}`)
+    return () => {}
   }
 
-  postprocessParsedReceipt(parsed)
+  private isValidReceiptFieldKey(value: unknown): value is ReceiptFieldsKeyValues {
+    return typeof value === 'number' && RECEIPT_FIELDS_MAP.has(value as ReceiptFieldsKeyValues)
+  }
 
-  return parsed as ParsedReceipt
+  private extractStringValue(field: ASN1.OctetString): string {
+    const [fieldValue] = field.valueBlock.value
+
+    if (fieldValue instanceof ASN1.IA5String || fieldValue instanceof ASN1.Utf8String) {
+      return fieldValue.valueBlock.value
+    }
+
+    return field.toJSON().valueBlock.valueHex
+  }
+
+  private addFieldToReceipt(name: ReceiptFieldsKeyNames, value: string): void {
+    this.addToArrayFieldIfApplicable(name, value)
+    this.parsed[name] = value
+  }
+
+  private addToArrayFieldIfApplicable(name: ReceiptFieldsKeyNames, value: string): void {
+    const arrayFields: Record<string, keyof ParsedReceipt> = {
+      'IN_APP_ORIGINAL_TRANSACTION_ID': 'IN_APP_ORIGINAL_TRANSACTION_IDS',
+      'IN_APP_TRANSACTION_ID': 'IN_APP_TRANSACTION_IDS',
+    }
+
+    const arrayFieldName = arrayFields[name]
+    if (arrayFieldName) {
+      (this.parsed[arrayFieldName] as string[]).push(value)
+    }
+  }
+
+  private validateParsedFields(): void {
+    const missingFields = Array.from(RECEIPT_FIELDS_MAP.values())
+      .filter(fieldKey => !(fieldKey in this.parsed))
+
+    if (missingFields.length > 0) {
+      throw new Error(`Missing required fields: ${missingFields.join(', ')}`)
+    }
+  }
+
+  private deduplicateArrayFields(): void {
+    this.parsed.IN_APP_ORIGINAL_TRANSACTION_IDS = this.removeDuplicates(this.parsed.IN_APP_ORIGINAL_TRANSACTION_IDS)
+    this.parsed.IN_APP_TRANSACTION_IDS = this.removeDuplicates(this.parsed.IN_APP_TRANSACTION_IDS)
+  }
+
+  private removeDuplicates(array: string[]): string[] {
+    return [...new Set(array)]
+  }
+}
+
+export function parseReceipt(receipt: string): ParsedReceipt {
+  return new ReceiptParser().parseReceipt(receipt)
 }
