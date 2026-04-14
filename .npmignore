@@ -1,7 +1,9 @@
 .idea/
+.github/
 coverage/
 test/
 
-.eslintrc
+.editorconfig
 .scrutinizer.yml
-jest.config.js
+eslint.config.mjs
+tsconfig.json
