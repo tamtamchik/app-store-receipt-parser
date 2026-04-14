@@ -50,7 +50,8 @@
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --clean",
     "dev": "npm run build -- --watch src",
-    "lint": "eslint src --fix",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
     "test": "node --import tsx --test test/*.test.ts",
     "coverage": "c8 --reporter=text --reporter=lcov node --import tsx --test test/*.test.ts",
     "prepublishOnly": "npm run build"
