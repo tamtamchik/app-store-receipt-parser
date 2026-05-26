@@ -55,6 +55,22 @@ describe('parseReceipt', () => {
       '1000000166865231',
       '1000000166965150',
     ])
+
+    assert.deepStrictEqual(
+      receipt.IN_APP_RECEIPTS.map(inAppReceipt => inAppReceipt.IN_APP_TRANSACTION_ID),
+      receipt.IN_APP_TRANSACTION_IDS,
+    )
+    assert.deepStrictEqual(receipt.IN_APP_RECEIPTS.at(-1), {
+      IN_APP_EXPIRES_DATE: '2015-08-10T07:19:32Z',
+      IN_APP_CANCELLATION_DATE: '',
+      IN_APP_QUANTITY: '020101',
+      IN_APP_WEB_ORDER_LINE_ITEM_ID: '0207038d7ea69472c9',
+      IN_APP_PRODUCT_ID: 'monthly',
+      IN_APP_TRANSACTION_ID: '1000000166967782',
+      IN_APP_ORIGINAL_TRANSACTION_ID: '1000000166965150',
+      IN_APP_PURCHASE_DATE: '2015-08-10T07:14:32Z',
+      IN_APP_ORIGINAL_PURCHASE_DATE: '2015-08-10T07:12:34Z',
+    })
   })
 
   it('should parse transactions correctly for validReceipt2', () => {
@@ -83,6 +99,18 @@ describe('parseReceipt', () => {
 
     assert.deepStrictEqual(receipt.IN_APP_ORIGINAL_TRANSACTION_ID, '1000000472106082')
     assert.deepStrictEqual(receipt.IN_APP_ORIGINAL_TRANSACTION_IDS, ['1000000472106082'])
+
+    assert.deepStrictEqual(receipt.IN_APP_RECEIPTS, [{
+      IN_APP_EXPIRES_DATE: '',
+      IN_APP_CANCELLATION_DATE: '',
+      IN_APP_QUANTITY: '020101',
+      IN_APP_WEB_ORDER_LINE_ITEM_ID: '020100',
+      IN_APP_PRODUCT_ID: 'test2',
+      IN_APP_TRANSACTION_ID: '1000000472106082',
+      IN_APP_ORIGINAL_TRANSACTION_ID: '1000000472106082',
+      IN_APP_PURCHASE_DATE: '2018-11-13T16:46:31Z',
+      IN_APP_ORIGINAL_PURCHASE_DATE: '2018-11-13T16:46:31Z',
+    }])
   })
 
   it('should handle receipts with unexpected fields', () => {
