@@ -4,12 +4,25 @@ updates:
     directory: /
     schedule:
       interval: weekly
-    open-pull-requests-limit: 10
-    groups:
-      dev-dependencies:
-        dependency-type: development
+      day: monday
+      time: "09:00"
+      timezone: Europe/Lisbon
+    open-pull-requests-limit: 2
+    versioning-strategy: lockfile-only
+    cooldown:
+      default-days: 7
+      semver-major-days: 30
+      semver-minor-days: 14
+      semver-patch-days: 7
 
+  # Workflows pin actions by full commit SHA; Dependabot updates those pins.
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: Europe/Lisbon
+    open-pull-requests-limit: 1
+    cooldown:
+      default-days: 7
