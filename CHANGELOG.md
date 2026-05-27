@@ -15,6 +15,7 @@
 ### Maintenance
 
 - Updated dependency lockfile entries already merged into `main`.
+- Updated transitive development dependency resolution for `brace-expansion` to clear npm audit findings.
 - Pinned GitHub Actions workflow actions by commit SHA and constrained Dependabot update cadence.
 
 ## 2.2.3 - 2026-04-15
