@@ -1,2 +1,2 @@
-export type { ParsedReceipt } from './ReceiptParser'
+export type { InAppReceipt, ParsedReceipt } from './ReceiptParser'
 export { parseReceipt } from './ReceiptParser'
