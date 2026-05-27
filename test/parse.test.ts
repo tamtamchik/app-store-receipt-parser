@@ -18,7 +18,7 @@ describe('parseReceipt', () => {
     assert.throws(() => parseReceipt(''), { message: 'Receipt must be a non-empty string.' })
   })
 
-  it('should parse transactions correctly for validReceipt', () => {
+  it('should parse receipt data correctly for validReceipt', () => {
     const receipt = parseReceipt(validReceipt)
 
     assert.ok(receipt)
@@ -73,7 +73,7 @@ describe('parseReceipt', () => {
     })
   })
 
-  it('should parse transactions correctly for validReceipt2', () => {
+  it('should parse receipt data correctly for validReceipt2', () => {
     const receipt = parseReceipt(validReceipt2)
 
     assert.ok(receipt)
