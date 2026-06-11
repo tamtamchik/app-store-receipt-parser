@@ -14,6 +14,12 @@ A lightweight TypeScript library for extracting selected fields from Apple's ASN
 > It extracts supported fields from Apple's ASN.1 encoded Unified Receipts, including in-app purchase receipts.
 > It does not work with the old-style transaction receipts.
 
+> [!CAUTION]
+> This library does **not** verify the receipt's PKCS#7 signature — it only checks that the ASN.1
+> structure has the expected shape. The extracted data is not cryptographically trustworthy on its own.
+> Do not grant entitlements based on it without verifying the receipt signature (or using Apple's
+> [App Store Server API](https://developer.apple.com/documentation/appstoreserverapi)) separately.
+
 > [!NOTE]
 > Documentation for the version 1.x of the library can be found [here](https://github.com/tamtamchik/app-store-receipt-parser/tree/1.x/README.md).
 
