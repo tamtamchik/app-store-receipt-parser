@@ -3,7 +3,7 @@ import assert from 'node:assert'
 import { parseReceipt } from '../src'
 import fixtures from './fixtures.json'
 
-const { invalidReceipt, validReceipt, validReceipt2 } = fixtures
+const { invalidReceipt, validReceipt, validReceipt2, validReceiptNoInApp } = fixtures
 
 describe('parseReceipt', () => {
   it('should be defined', () => {
@@ -111,6 +111,22 @@ describe('parseReceipt', () => {
       IN_APP_PURCHASE_DATE: '2018-11-13T16:46:31Z',
       IN_APP_ORIGINAL_PURCHASE_DATE: '2018-11-13T16:46:31Z',
     }])
+  })
+
+  it('should parse receipt without in-app purchases', () => {
+    const receipt = parseReceipt(validReceiptNoInApp)
+
+    assert.ok(receipt)
+    assert.deepStrictEqual(receipt.ENVIRONMENT, 'ProductionSandbox')
+    assert.deepStrictEqual(receipt.BUNDLE_ID, 'com.example.app')
+    assert.deepStrictEqual(receipt.APP_VERSION, '1')
+    assert.deepStrictEqual(receipt.ORIGINAL_APP_VERSION, '1.0')
+    assert.deepStrictEqual(receipt.RECEIPT_CREATION_DATE, '2020-01-01T00:00:00Z')
+    assert.deepStrictEqual(receipt.ORIGINAL_PURCHASE_DATE, '2020-01-01T00:00:00Z')
+    assert.deepStrictEqual(receipt.IN_APP_RECEIPTS, [])
+    assert.deepStrictEqual(receipt.IN_APP_TRANSACTION_IDS, [])
+    assert.deepStrictEqual(receipt.IN_APP_ORIGINAL_TRANSACTION_IDS, [])
+    assert.deepStrictEqual(receipt.IN_APP_TRANSACTION_ID, undefined)
   })
 
   it('should handle receipts with unexpected fields', () => {
