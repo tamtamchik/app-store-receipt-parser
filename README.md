@@ -92,6 +92,12 @@ console.log(data);
 // }
 ```
 
+> [!WARNING]
+> Top-level scalar `IN_APP_*` fields (e.g. `IN_APP_PRODUCT_ID`, `IN_APP_TRANSACTION_ID`) hold the value
+> from the **last** in-app purchase block encountered in the receipt, and Apple does not guarantee the
+> order of those blocks. They are kept for backward compatibility — for reliable per-purchase data use
+> `IN_APP_RECEIPTS`.
+
 ## Special Thanks
 
 - [@Jurajzovinec](https://github.com/Jurajzovinec) for his superb contribution to the project.
