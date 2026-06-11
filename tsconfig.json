@@ -8,7 +8,8 @@
     "declaration": true,
     "outDir": "./dist",
     "rootDir": ".",
-    "moduleResolution": "node"
+    "moduleResolution": "bundler",
+    "types": ["node"]
   },
   "include": [
     "src/**/*.ts",
