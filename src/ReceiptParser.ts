@@ -139,7 +139,9 @@ class ReceiptParser {
   }
 
   private validateParsedFields(): void {
+    // In-app fields are optional: a valid receipt may contain no in-app purchases.
     const missingFields = Array.from(RECEIPT_FIELDS_MAP.values())
+      .filter(fieldKey => !fieldKey.startsWith('IN_APP_'))
       .filter(fieldKey => !(fieldKey in this.parsed))
 
     if (missingFields.length > 0) {
