@@ -11,7 +11,7 @@ import {
 
 import { ReceiptVerifier } from './ReceiptVerifier'
 
-export type Environment = 'Production' | 'ProductionSandbox' | string
+export type Environment = 'Production' | 'ProductionSandbox' | (string & {})
 
 export type InAppReceipt = Partial<Record<ReceiptFieldsKeyNames, string>>
 
