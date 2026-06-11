@@ -35,8 +35,8 @@ describe('parseReceipt', () => {
     assert.deepStrictEqual(receipt.IN_APP_ORIGINAL_PURCHASE_DATE, '2015-08-10T07:12:34Z')
     assert.deepStrictEqual(receipt.IN_APP_EXPIRES_DATE, '2015-08-10T07:19:32Z')
     assert.deepStrictEqual(receipt.IN_APP_CANCELLATION_DATE, '')
-    assert.deepStrictEqual(receipt.IN_APP_QUANTITY, '020101')
-    assert.deepStrictEqual(receipt.IN_APP_WEB_ORDER_LINE_ITEM_ID, '0207038d7ea69472c9')
+    assert.deepStrictEqual(receipt.IN_APP_QUANTITY, '1')
+    assert.deepStrictEqual(receipt.IN_APP_WEB_ORDER_LINE_ITEM_ID, '1000000030274249')
     assert.deepStrictEqual(receipt.IN_APP_PRODUCT_ID, 'monthly')
 
     assert.deepStrictEqual(receipt.IN_APP_TRANSACTION_ID, '1000000166967782')
@@ -63,8 +63,8 @@ describe('parseReceipt', () => {
     assert.deepStrictEqual(receipt.IN_APP_RECEIPTS.at(-1), {
       IN_APP_EXPIRES_DATE: '2015-08-10T07:19:32Z',
       IN_APP_CANCELLATION_DATE: '',
-      IN_APP_QUANTITY: '020101',
-      IN_APP_WEB_ORDER_LINE_ITEM_ID: '0207038d7ea69472c9',
+      IN_APP_QUANTITY: '1',
+      IN_APP_WEB_ORDER_LINE_ITEM_ID: '1000000030274249',
       IN_APP_PRODUCT_ID: 'monthly',
       IN_APP_TRANSACTION_ID: '1000000166967782',
       IN_APP_ORIGINAL_TRANSACTION_ID: '1000000166965150',
@@ -90,8 +90,8 @@ describe('parseReceipt', () => {
     assert.deepStrictEqual(receipt.IN_APP_ORIGINAL_PURCHASE_DATE, '2018-11-13T16:46:31Z')
     assert.deepStrictEqual(receipt.IN_APP_EXPIRES_DATE, '')
     assert.deepStrictEqual(receipt.IN_APP_CANCELLATION_DATE, '')
-    assert.deepStrictEqual(receipt.IN_APP_QUANTITY, '020101')
-    assert.deepStrictEqual(receipt.IN_APP_WEB_ORDER_LINE_ITEM_ID, '020100')
+    assert.deepStrictEqual(receipt.IN_APP_QUANTITY, '1')
+    assert.deepStrictEqual(receipt.IN_APP_WEB_ORDER_LINE_ITEM_ID, '0')
     assert.deepStrictEqual(receipt.IN_APP_PRODUCT_ID, 'test2')
 
     assert.deepStrictEqual(receipt.IN_APP_TRANSACTION_ID, '1000000472106082')
@@ -103,8 +103,8 @@ describe('parseReceipt', () => {
     assert.deepStrictEqual(receipt.IN_APP_RECEIPTS, [{
       IN_APP_EXPIRES_DATE: '',
       IN_APP_CANCELLATION_DATE: '',
-      IN_APP_QUANTITY: '020101',
-      IN_APP_WEB_ORDER_LINE_ITEM_ID: '020100',
+      IN_APP_QUANTITY: '1',
+      IN_APP_WEB_ORDER_LINE_ITEM_ID: '0',
       IN_APP_PRODUCT_ID: 'test2',
       IN_APP_TRANSACTION_ID: '1000000472106082',
       IN_APP_ORIGINAL_TRANSACTION_ID: '1000000472106082',

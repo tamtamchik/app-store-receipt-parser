@@ -115,6 +115,10 @@ class ReceiptParser {
       return fieldValue.valueBlock.value
     }
 
+    if (fieldValue instanceof ASN1.Integer) {
+      return fieldValue.toBigInt().toString()
+    }
+
     return field.toJSON().valueBlock.valueHex
   }
 
