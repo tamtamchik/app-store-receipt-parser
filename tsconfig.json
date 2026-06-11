@@ -9,7 +9,7 @@
     "outDir": "./dist",
     "rootDir": ".",
     "moduleResolution": "bundler",
-    "ignoreDeprecations": "6.0"
+    "types": ["node"]
   },
   "include": [
     "src/**/*.ts",
