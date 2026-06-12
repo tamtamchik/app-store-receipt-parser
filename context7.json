@@ -6,8 +6,8 @@
   "excludeFolders": ["src", "test", "dist"],
   "excludeFiles": [],
   "rules": [
-    "The parser does not verify receipt signatures; validate receipts with Apple before trusting them",
-    "ASN.1 INTEGER fields are decoded to decimal strings",
-    "Top-level IN_APP_* fields keep the last in-app purchase value; use IN_APP_RECEIPTS for all purchases"
+    "Validate receipts with Apple before trusting them; the parser does not verify receipt signatures",
+    "Treat parsed INTEGER fields as decimal strings, not numbers",
+    "Use IN_APP_RECEIPTS to access all in-app purchases; top-level IN_APP_* fields only keep the last one"
   ]
 }
