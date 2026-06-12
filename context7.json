@@ -1,0 +1,13 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "App Store Receipt Parser",
+  "description": "A lightweight TypeScript library for extracting selected fields from Apple's ASN.1 encoded receipts.",
+  "folders": [],
+  "excludeFolders": ["src", "test", "dist"],
+  "excludeFiles": [],
+  "rules": [
+    "The parser does not verify receipt signatures; validate receipts with Apple before trusting them",
+    "ASN.1 INTEGER fields are decoded to decimal strings",
+    "Top-level IN_APP_* fields keep the last in-app purchase value; use IN_APP_RECEIPTS for all purchases"
+  ]
+}
