@@ -1,5 +1,26 @@
 # Changelog
 
+## 2.3.1 - 2026-06-12
+
+### Fixed
+
+- Decoded ASN.1 `INTEGER` field values to decimal strings instead of raw hex.
+- Preserved `Environment` literal type hints and exported the `Environment` type from the package entrypoint.
+- Shipped generated type declarations instead of hand-written ones.
+- Allowed parsing receipts without in-app purchases.
+
+### Changed
+
+- Documented last-wins semantics of top-level `IN_APP_*` fields.
+- Added a warning that receipt signatures are not verified.
+- Updated the README example to decoded integer values.
+
+### Maintenance
+
+- Replaced `tsup` with `tsdown` for the build.
+- Simplified the Dependabot configuration.
+- Updated development dependencies.
+
 ## 2.3.0 - 2026-05-27
 
 ### Added
