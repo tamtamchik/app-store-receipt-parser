@@ -6,8 +6,12 @@
   "excludeFolders": ["src", "test", "dist"],
   "excludeFiles": [],
   "rules": [
-    "Validate receipts with Apple before trusting them; the parser does not verify receipt signatures",
-    "Treat parsed INTEGER fields as decimal strings, not numbers",
-    "Use IN_APP_RECEIPTS to access all in-app purchases; top-level IN_APP_* fields only keep the last one"
+    "Validate receipts with Apple (App Store Server API) before granting entitlements; the parser does not verify the PKCS#7 signature",
+    "Pass the receipt as a base64 string ('MII...'); old-style transaction receipts are not supported, only unified receipts",
+    "Wrap parseReceipt in try/catch: it throws on empty input, schema mismatch, and missing required fields",
+    "Treat every parsed value as a string: quantities are decimal strings, dates are ISO 8601 strings, absent dates are empty strings",
+    "Use IN_APP_RECEIPTS to access all in-app purchases; top-level IN_APP_* fields only keep the last one",
+    "Use IN_APP_TRANSACTION_IDS and IN_APP_ORIGINAL_TRANSACTION_IDS for deduplicated ID lists across all purchases",
+    "Expect ENVIRONMENT to default to 'Production' when the receipt omits the field"
   ]
 }
