@@ -5,6 +5,7 @@
 [![Scrutinizer quality][ico-scrutinizer-quality]][link-scrutinizer]
 [![Scrutinizer coverage][ico-scrutinizer-coverage]][link-scrutinizer]
 [![Software License][ico-license]](./LICENSE)
+[![Monthly Downloads][ico-downloads-month]][link-downloads]
 [![Total Downloads][ico-downloads]][link-downloads]
 
 A lightweight TypeScript library for extracting selected fields from Apple's ASN.1 encoded Unified Receipts.
@@ -127,6 +128,7 @@ This project uses `ASN1.js`, licensed under the BSD-3-Clause License. The licens
 [ico-coffee]: https://img.shields.io/badge/Buy%20Me%20A-Coffee-%236F4E37.svg?style=flat-square
 [ico-version]: https://img.shields.io/npm/v/@tamtamchik/app-store-receipt-parser.svg?style=flat-square
 [ico-license]: https://img.shields.io/npm/l/@tamtamchik/app-store-receipt-parser.svg?style=flat-square
+[ico-downloads-month]: https://img.shields.io/npm/dm/@tamtamchik/app-store-receipt-parser.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/npm/dt/@tamtamchik/app-store-receipt-parser.svg?style=flat-square
 [ico-scrutinizer-build]: https://img.shields.io/scrutinizer/build/g/tamtamchik/app-store-receipt-parser/main.svg?style=flat-square
 [ico-scrutinizer-quality]: https://img.shields.io/scrutinizer/quality/g/tamtamchik/app-store-receipt-parser/main.svg?style=flat-square
